@@ -97,6 +97,12 @@
     .toggle-btn.active { background: #D4A017; color: #0A0A0A; }
     .toggle-btn:not(.active) { background: transparent; color: #525252; }
 
+    /* Pie Chart */
+    .pie-wrap { display: flex; align-items: center; gap: 32px; margin-top: 24px; flex-wrap: wrap; }
+    .pie-legend { display: flex; flex-wrap: wrap; gap: 12px 24px; }
+    .legend-item { display: flex; align-items: center; gap: 8px; }
+    .legend-dot { width: 12px; height: 12px; border-radius: 50%; flex-shrink: 0; }
+
     /* ===== ANIMATIONS ===== */
     .fade-in { opacity: 0; transform: translateY(40px); transition: opacity 0.8s ease, transform 0.8s ease; }
     .fade-in.visible { opacity: 1; transform: translateY(0); }
@@ -196,6 +202,39 @@
         </div>
       </div>
 
+      <!-- Industry Structure -->
+      <div class="channel-block fade-in">
+        <span class="channel-label label-style">03 &middot; INDUSTRY STRUCTURE</span>
+        <h2>The Great Realignment</h2>
+        <p>Australia's economy will see a profound shift in its industrial composition. Small and medium-sized enterprises (SMEs) &mdash; companies with 200 employees or less &mdash; are expected to drive 55% of the GDP growth from AI adoption, yet they face the steepest barriers: skills gaps, capital constraints, and limited access to compute infrastructure. Meanwhile, the 'new AI economy' &mdash; AI products, services, data centres, and AI-specific chips &mdash; could contribute A$20&ndash;25 billion in GDP by 2034. The risk is a two-speed economy where large corporations capture most of the gains.</p>
+        <div class="cards-grid">
+          <div class="card"><div class="card-value">55%</div><div class="card-label">of AI-driven GDP growth from SMEs</div></div>
+          <div class="card"><div class="card-value">40%</div><div class="card-label">AI adoption rate in large firms vs 11.9% in small firms</div></div>
+          <div class="card"><div class="card-value">A$20&ndash;25B</div><div class="card-label">new AI economy GDP contribution by 2034</div></div>
+        </div>
+        <div class="pie-wrap fade-in">
+          <svg viewBox="0 0 200 200" width="180" height="180">
+            <circle cx="100" cy="100" r="0" fill="#D4A017"><animate attributeName="r" from="0" to="80" dur="0.8s" fill="freeze"/></circle>
+            <!-- Simplified pie using conic approach via SVG arcs -->
+            <g transform="translate(100,100)">
+              <path d="M0,0 L0,-80 A80,80 0 0,1 68,-42 Z" fill="#D4A017"><animateTransform attributeName="transform" type="scale" from="0" to="1" dur="0.6s" fill="freeze"/></path>
+              <path d="M0,0 L68,-42 A80,80 0 0,1 76,25 Z" fill="#1E3A5F"><animateTransform attributeName="transform" type="scale" from="0" to="1" dur="0.6s" begin="0.08s" fill="freeze"/></path>
+              <path d="M0,0 L76,25 A80,80 0 0,1 25,76 Z" fill="#B88A14"><animateTransform attributeName="transform" type="scale" from="0" to="1" dur="0.6s" begin="0.16s" fill="freeze"/></path>
+              <path d="M0,0 L25,76 A80,80 0 0,1 -42,68 Z" fill="#2A5080"><animateTransform attributeName="transform" type="scale" from="0" to="1" dur="0.6s" begin="0.24s" fill="freeze"/></path>
+              <path d="M0,0 L-42,68 A80,80 0 0,1 -68,-42 Z" fill="#E5B128"><animateTransform attributeName="transform" type="scale" from="0" to="1" dur="0.6s" begin="0.32s" fill="freeze"/></path>
+              <path d="M0,0 L-68,-42 A80,80 0 0,1 0,-80 Z" fill="#3D6A9A"><animateTransform attributeName="transform" type="scale" from="0" to="1" dur="0.6s" begin="0.40s" fill="freeze"/></path>
+            </g>
+          </svg>
+          <div class="pie-legend">
+            <div class="legend-item"><span class="legend-dot" style="background:#D4A017"></span><span style="font-size:13px;color:#525252">Professional Services (27%)</span></div>
+            <div class="legend-item"><span class="legend-dot" style="background:#1E3A5F"></span><span style="font-size:13px;color:#525252">Healthcare (20%)</span></div>
+            <div class="legend-item"><span class="legend-dot" style="background:#B88A14"></span><span style="font-size:13px;color:#525252">Education (16%)</span></div>
+            <div class="legend-item"><span class="legend-dot" style="background:#2A5080"></span><span style="font-size:13px;color:#525252">Mining (12%)</span></div>
+            <div class="legend-item"><span class="legend-dot" style="background:#E5B128"></span><span style="font-size:13px;color:#525252">Manufacturing (10%)</span></div>
+            <div class="legend-item"><span class="legend-dot" style="background:#3D6A9A"></span><span style="font-size:13px;color:#525252">Retail &amp; Other (15%)</span></div>
+          </div>
+        </div>
+      </div>
     </div>
   </section>
 
