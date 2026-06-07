@@ -139,6 +139,24 @@
     .risk-text { font-size: 18px; font-weight: 500; }
     .sim-disclaimer { font-size: 11px; color: #FAFAF5; opacity: 0.4; margin-top: 24px; }
 
+    /* ===== POLICY ===== */
+    .policy { background: #FAFAF5; }
+    .policy > .content-max > p { max-width: 700px; margin-bottom: 40px; }
+    .tree-node { margin-top: 16px; }
+    .tree-question { background: #1E3A5F; color: #FAFAF5; border-radius: 12px; padding: 20px 28px; font-size: 16px; }
+    .tree-choices { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 16px; }
+    .tree-choice-btn {
+      font-family: 'Inter', sans-serif; font-size: 13px; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase;
+      padding: 10px 22px; border-radius: 100px; border: 1px solid #D4A017; color: #1E3A5F;
+      cursor: pointer; transition: all 0.2s;
+    }
+    .tree-choice-btn:hover, .tree-choice-btn.active { background: #D4A017; color: #0A0A0A; }
+    .tree-consequence {
+      background: #FFFFFF; border-left: 4px solid #D4A017; border-radius: 0 8px 8px 0;
+      padding: 20px 28px; margin-top: 12px; font-size: 15px; line-height: 1.6; color: #0A0A0A;
+    }
+    .tree-children { margin-left: 24px; margin-top: 16px; }
+
     /* ===== ANIMATIONS ===== */
     .fade-in { opacity: 0; transform: translateY(40px); transition: opacity 0.8s ease, transform 0.8s ease; }
     .fade-in.visible { opacity: 1; transform: translateY(0); }
@@ -332,6 +350,16 @@
     </div>
   </section>
 
+  <!-- ===== POLICY ===== -->
+  <section id="policy" class="policy section-padding">
+    <div class="content-max">
+      <span class="label-style" style="color:#D4A017;display:block;margin-bottom:16px">POLICY PLAYBOOK</span>
+      <h2 class="fade-in">Decision Pathways for Policymakers</h2>
+      <p class="fade-in">Australia's AI future is not predetermined. The choices made by governments, businesses, and educational institutions over the next five years will determine whether the nation captures the full A$235 billion opportunity or falls into the A$85 billion conservative trap. Navigate the decision tree below to explore policy pathways and their consequences.</p>
+      <div class="fade-in" id="policy-tree"></div>
+    </div>
+  </section>
+
 
   <!-- ===== JAVASCRIPT ===== -->
   <script>
@@ -479,6 +507,85 @@
     document.getElementById('risk-text').textContent = risk;
     document.getElementById('risk-text').style.color = riskColor;
   }
+
+  // ===== POLICY DECISION TREE =====
+  const policyData = {
+    id: 'root', question: "What is Australia's primary AI policy priority?",
+    choices: [
+      { label: 'Accelerate adoption', consequence: 'Focus on rapid deployment across sectors. Key risk: uneven distribution of benefits if SMEs are left behind.', children: [
+        { question: 'Which sector should be prioritised?', choices: [
+          { label: 'Enterprise', consequence: 'Large firms have resources to deploy AI at scale. Expected outcome: A$40-60B GDP impact by 2030. Risk: widens productivity gap with SMEs. KPI: % of ASX200 firms with AI strategy.' },
+          { label: 'SMEs', consequence: 'SMEs contribute 55% of expected AI-driven GDP growth but face barriers. Investment needed: A$2-3B in subsidised tools, training, and compute access. KPI: SME AI adoption rate reaching 35% by 2030.' },
+          { label: 'Public sector', consequence: 'Government as exemplar: 56 entities already use AI. Potential savings: A$5-8B annually through automation. KPI: 100% of federal agencies with AI assurance frameworks by 2027.' }
+        ]}
+      ]},
+      { label: 'Build sovereign capability', consequence: 'Invest in domestic AI infrastructure and talent. Key risk: high upfront cost with long payback period.', children: [
+        { question: 'Which capability area?', choices: [
+          { label: 'Invest in compute', consequence: 'Australia currently lacks sovereign GPU clusters. Estimated cost: A$4-5B for competitive capacity. Could attract A$27-49B in private capital. Timeline: 3-5 years to operational.' },
+          { label: 'Develop talent', consequence: 'Australia needs 200,000 new AI builders by 2030. Cost: A$1B over 5 years for 500K trained workers. ROI: every A$1 spent on AI training returns A$4-10 in GDP growth.' },
+          { label: 'National datasets', consequence: 'Create specialised AI models for Australian use cases (geoscience, health, banking). Requires: data governance reform, privacy-preserving techniques, Indigenous data sovereignty agreements.' }
+        ]}
+      ]},
+      { label: 'Protect workers & regulate', consequence: 'Focus on safety, equity, and transition support. Key risk: overly restrictive policy could reduce adoption by 30-40%.', children: [
+        { question: 'Which protective measure?', choices: [
+          { label: 'Reskilling programs', consequence: 'Only 17% of ANZ organisations actively reskill. National program needed: A$1.5B over 5 years. Target: 1M workers transitioned to AI-augmented roles by 2029.' },
+          { label: 'Income support', consequence: 'For workers in high-displacement regions (Pilbara: 30%+ disruption). Cost: A$500M-1B annually. Could be linked to existing JobSeeker with AI-transition supplement.' },
+          { label: 'Risk-based regulation', consequence: 'Productivity Commission recommends "enable first, regulate carefully." Gap analysis of existing laws should be priority. Avoid EU AI Act-style blanket rules unless justified.' }
+        ]}
+      ]}
+    ]
+  };
+
+  function renderTree(node, container, depth) {
+    const nodeEl = document.createElement('div');
+    nodeEl.className = 'tree-node';
+    nodeEl.style.marginLeft = depth > 0 ? '24px' : '0';
+
+    const qEl = document.createElement('div');
+    qEl.className = 'tree-question';
+    qEl.style.background = depth === 0 ? '#1E3A5F' : '#2A5080';
+    qEl.textContent = node.question;
+    nodeEl.appendChild(qEl);
+
+    const choicesEl = document.createElement('div');
+    choicesEl.className = 'tree-choices';
+
+    node.choices.forEach((choice, i) => {
+      const btn = document.createElement('button');
+      btn.className = 'tree-choice-btn';
+      btn.textContent = choice.label;
+
+      let expanded = false;
+      btn.onclick = () => {
+        expanded = !expanded;
+        const existing = nodeEl.querySelector('.consequence-' + i);
+        if (existing) { existing.remove(); expanded = false; btn.classList.remove('active'); return; }
+
+        nodeEl.querySelectorAll('[class^="consequence-"]').forEach(el => el.remove());
+        nodeEl.querySelectorAll('.tree-choice-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+
+        const consEl = document.createElement('div');
+        consEl.className = 'tree-consequence consequence-' + i;
+        consEl.textContent = choice.consequence;
+        nodeEl.appendChild(consEl);
+
+        if (choice.children) {
+          const childWrap = document.createElement('div');
+          childWrap.className = 'tree-children';
+          choice.children.forEach(child => renderTree(child, childWrap, depth + 1));
+          nodeEl.appendChild(childWrap);
+        }
+      };
+      choicesEl.appendChild(btn);
+    });
+
+    nodeEl.appendChild(choicesEl);
+    container.appendChild(nodeEl);
+  }
+
+  const treeContainer = document.getElementById('policy-tree');
+  if (treeContainer) renderTree(policyData, treeContainer, 0);
 
   // Init sim
   updateSim();
