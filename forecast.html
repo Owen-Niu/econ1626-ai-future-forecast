@@ -157,6 +157,27 @@
     }
     .tree-children { margin-left: 24px; margin-top: 16px; }
 
+    /* ===== METHODS ===== */
+    .methods { background: #FFFFFF; }
+    .methods h3 { font-family: 'Inter', sans-serif; font-size: 20px; font-weight: 500; line-height: 1.3; color: #0A0A0A; margin-bottom: 12px; margin-top: 32px; }
+    .methods h3:first-child { margin-top: 0; }
+    .methods p { font-size: 16px; color: #525252; line-height: 1.7; }
+    .methods-grid { display: grid; grid-template-columns: 55% 45%; gap: 48px; }
+    .assumptions-box { background: #FAFAF5; border: 1px solid #E5E5E5; border-radius: 12px; padding: 32px; }
+    .warning-box { background: rgba(212,160,23,0.1); border-left: 3px solid #D4A017; padding: 16px; border-radius: 0 8px 8px 0; margin-top: 24px; font-size: 14px; }
+
+    /* ===== REFERENCES ===== */
+    .references { background: #FAFAF5; padding: 80px 48px; }
+    .ref-list { max-height: 400px; overflow-y: auto; }
+    .ref-item { display: flex; gap: 16px; padding: 12px 0; border-bottom: 1px solid #E5E5E5; }
+    .ref-num { font-family: 'Instrument Serif', Georgia, serif; font-size: 18px; color: #D4A017; flex-shrink: 0; width: 28px; }
+    .ref-text { font-size: 15px; color: #0A0A0A; line-height: 1.6; }
+
+    /* ===== FOOTER ===== */
+    footer { background: #0A0A0A; padding: 60px 48px; }
+    footer .content-max { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 16px; }
+    footer span { font-size: 14px; color: #FAFAF5; opacity: 0.6; }
+
     /* ===== ANIMATIONS ===== */
     .fade-in { opacity: 0; transform: translateY(40px); transition: opacity 0.8s ease, transform 0.8s ease; }
     .fade-in.visible { opacity: 1; transform: translateY(0); }
@@ -359,6 +380,62 @@
       <div class="fade-in" id="policy-tree"></div>
     </div>
   </section>
+
+  <!-- ===== METHODS ===== -->
+  <section id="data" class="methods section-padding">
+    <div class="content-max">
+      <span class="label-style" style="color:#D4A017;display:block;margin-bottom:16px">METHODOLOGY</span>
+      <h2 class="fade-in">How This Forecast Was Built</h2>
+      <div class="methods-grid fade-in">
+        <div>
+          <h3>Data Sources</h3>
+          <p>This forecast synthesises data from multiple authoritative sources: the Tech Council of Australia and Microsoft's 'Australia's Generative AI Opportunity' (2023) report; the Australian Academy of Technological Sciences and Engineering (ATSE) 'Australia's AI Investment Blueprint' (2025); CSIRO's Data61 AI Ethics Framework; the OECD's AI Policy Observatory; McKinsey's 'Australia's Automation Opportunity' (2020); Productivity Commission inquiries on data and digital technology (2024&ndash;2025); and Australian Bureau of Statistics data on ICT adoption and industry value-add.</p>
+          <h3>Modelling Approach</h3>
+          <p>The scenario model uses a simplified Cobb-Douglas production function augmented with AI capital and labour variables. Key assumptions include: AI adoption rates follow an S-curve with inflection around 2027; productivity gains of 35% for fully-augmented tasks; labour transition rates based on historical Australian re-employment data (38% value capture in year 1, 83% in year 2); and GDP elasticity estimates from OECD comparative studies (0.5%&ndash;3.5% annual labour productivity growth).</p>
+          <h3>AI Tools Disclosure</h3>
+          <p>This interactive essay was developed with assistance from AI-powered development tools. All data and claims are sourced from the peer-reviewed and government publications listed above. The scenario model was built using simplified economic relationships for pedagogical purposes and should not be interpreted as a formal econometric forecast.</p>
+        </div>
+        <div>
+          <div class="assumptions-box">
+            <h3>Key Assumptions &amp; Limitations</h3>
+            <p>This forecast carries significant uncertainties. The pace of AI capability development may accelerate beyond current projections (upside risk) or plateau due to technical constraints (downside risk). Australia's regulatory response remains uncertain &mdash; overly restrictive policy could reduce adoption by 30&ndash;40%, while under-regulation risks public trust erosion and safety incidents. The model does not account for geopolitical disruptions, energy constraints on compute infrastructure, or the possibility of artificial general intelligence (AGI) within the forecast horizon. Workforce transition speed is the single largest variable: slow re-employment could reduce GDP gains by A$30&ndash;50 billion.</p>
+            <div class="warning-box"><strong>Structural uncertainty:</strong> The forecast horizon (2027&ndash;2030) may see capability breakthroughs (multimodal AI, agentic systems) that render current projections conservative, or regulatory reactions that constrain deployment faster than expected.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== REFERENCES ===== -->
+  <section class="references">
+    <div class="content-max">
+      <span class="label-style" style="color:#D4A017;display:block;margin-bottom:16px">REFERENCES</span>
+      <h2 class="fade-in">Sources &amp; Attributions</h2>
+      <div class="ref-list fade-in">
+        <div class="ref-item"><span class="ref-num">1.</span><span class="ref-text">Microsoft &amp; Tech Council of Australia (2023). <em>Australia's Generative AI Opportunity</em>. Mandala analysis.</span></div>
+        <div class="ref-item"><span class="ref-num">2.</span><span class="ref-text">ATSE (2025). <em>Unleashing Growth: Australia's AI Investment Blueprint</em>. ACIL Allen analysis.</span></div>
+        <div class="ref-item"><span class="ref-num">3.</span><span class="ref-text">OpenAI (2025). <em>AI in Australia: Economic Blueprint</em>.</span></div>
+        <div class="ref-item"><span class="ref-num">4.</span><span class="ref-text">McKinsey &amp; Company (2020). <em>Australia's Automation Opportunity: Reigniting Productivity and Inclusive Income Growth</em>.</span></div>
+        <div class="ref-item"><span class="ref-num">5.</span><span class="ref-text">Productivity Commission (2025). <em>Harnessing Data and Digital Technology</em> (Inquiry Report).</span></div>
+        <div class="ref-item"><span class="ref-num">6.</span><span class="ref-text">OECD (2024). <em>AI Adoption by Small and Medium-Sized Enterprises</em>.</span></div>
+        <div class="ref-item"><span class="ref-num">7.</span><span class="ref-text">Australian Government (2024). <em>National Framework for the Assurance of Artificial Intelligence in Government</em>.</span></div>
+        <div class="ref-item"><span class="ref-num">8.</span><span class="ref-text">CSIRO Data61 (2019). <em>Australia's AI Ethics Framework</em>.</span></div>
+        <div class="ref-item"><span class="ref-num">9.</span><span class="ref-text">Australian Government (2024). <em>Voluntary AI Safety Standard</em>.</span></div>
+        <div class="ref-item"><span class="ref-num">10.</span><span class="ref-text">ANAO (2025). <em>Governance of Artificial Intelligence at the Australian Taxation Office</em>.</span></div>
+        <div class="ref-item"><span class="ref-num">11.</span><span class="ref-text">AIIA (2025). <em>Australia's AI Opportunities Report</em>.</span></div>
+        <div class="ref-item"><span class="ref-num">12.</span><span class="ref-text">IBM Institute for Business Value (2025). <em>Global AI Adoption Index</em>.</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== FOOTER ===== -->
+  <footer>
+    <div class="content-max">
+      <span>ECON1626 &middot; Economics of Artificial Intelligence &middot; RMIT University</span>
+      <span>Submitted June 2025 &middot; Interactive Web Essay Assessment</span>
+      <span>Built with HTML5 Canvas, CSS3 &amp; Vanilla JavaScript</span>
+    </div>
+  </footer>
 
 
   <!-- ===== JAVASCRIPT ===== -->
