@@ -88,6 +88,15 @@
     .bar-fill { height: 100%; border-radius: 16px; display: flex; align-items: center; justify-content: flex-end; padding-right: 12px; transition: width 1s ease-out; }
     .bar-fill span { color: white; font-size: 12px; font-weight: 500; }
 
+    /* Toggle */
+    .toggle-btns { display: flex; gap: 8px; margin-bottom: 24px; }
+    .toggle-btn {
+      font-family: 'Inter', sans-serif; font-size: 13px; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase;
+      padding: 10px 24px; border-radius: 100px; cursor: pointer; border: 1px solid #D4A017; transition: all 0.2s;
+    }
+    .toggle-btn.active { background: #D4A017; color: #0A0A0A; }
+    .toggle-btn:not(.active) { background: transparent; color: #525252; }
+
     /* ===== ANIMATIONS ===== */
     .fade-in { opacity: 0; transform: translateY(40px); transition: opacity 0.8s ease, transform 0.8s ease; }
     .fade-in.visible { opacity: 1; transform: translateY(0); }
@@ -163,6 +172,27 @@
           <div class="bar-row"><span class="bar-label">Mining</span><div class="bar-track"><div class="bar-fill" data-width="44" style="background:#1E3A5F;width:0%"><span>A$12B</span></div></div></div>
           <div class="bar-row"><span class="bar-label">Manufacturing</span><div class="bar-track"><div class="bar-fill" data-width="37" style="background:#D4A017;width:0%"><span>A$10B</span></div></div></div>
           <div class="bar-row"><span class="bar-label">Retail</span><div class="bar-track"><div class="bar-fill" data-width="30" style="background:#1E3A5F;width:0%"><span>A$8B</span></div></div></div>
+        </div>
+      </div>
+
+      <!-- Employment -->
+      <div class="channel-block fade-in">
+        <span class="channel-label label-style">02 &middot; EMPLOYMENT</span>
+        <h2>Jobs in Transition</h2>
+        <p>Between 3.5 million and 6.5 million full-time equivalent positions could be affected by automation, with 1.8 million to 5.0 million workers needing to change professions. The transition will not be uniform: disruption ranges from 16% of jobs in education to 33% in transport. Regional variation is significant &mdash; from 21% in city centres to over 30% in mining regions like the Pilbara. Critically, new jobs will emerge from higher productivity, rising consumer incomes, and greater health spending on an ageing population.</p>
+        <div class="toggle-btns">
+          <button class="toggle-btn active" onclick="showJobs('risk',this)">Jobs at Risk</button>
+          <button class="toggle-btn" onclick="showJobs('created',this)">Jobs Created</button>
+        </div>
+        <div id="jobs-risk" class="cards-grid">
+          <div class="card"><div class="card-value">3.5&ndash;6.5M</div><div class="card-label">FTE positions affected by 2030</div></div>
+          <div class="card"><div class="card-value">33%</div><div class="card-label">of transport jobs at risk</div></div>
+          <div class="card"><div class="card-value">16%</div><div class="card-label">of education jobs at risk</div></div>
+        </div>
+        <div id="jobs-created" class="cards-grid" style="display:none">
+          <div class="card"><div class="card-value">97M</div><div class="card-label">new AI-related jobs globally by 2025</div></div>
+          <div class="card"><div class="card-value">A$4B</div><div class="card-label">value from new AI jobs in Australia</div></div>
+          <div class="card"><div class="card-value">128,900</div><div class="card-label">additional jobs per year from robotics</div></div>
         </div>
       </div>
 
@@ -262,6 +292,14 @@
   }, { threshold: 0.3 });
   const barChart = document.querySelector('.bar-chart');
   if (barChart) barObserver.observe(barChart);
+
+  // ===== JOBS TOGGLE =====
+  function showJobs(view, btn) {
+    document.querySelectorAll('.toggle-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById('jobs-risk').style.display = view === 'risk' ? 'grid' : 'none';
+    document.getElementById('jobs-created').style.display = view === 'created' ? 'grid' : 'none';
+  }
 
   </script>
 </body>
