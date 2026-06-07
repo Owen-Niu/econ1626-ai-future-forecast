@@ -103,6 +103,42 @@
     .legend-item { display: flex; align-items: center; gap: 8px; }
     .legend-dot { width: 12px; height: 12px; border-radius: 50%; flex-shrink: 0; }
 
+    /* ===== SCENARIOS ===== */
+    .scenarios { background: #0A1628; }
+    .scenarios h2 { color: #FAFAF5; }
+    .scenarios > .content-max > p { color: #FAFAF5; opacity: 0.8; max-width: 700px; margin-bottom: 48px; }
+    .simulator { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 32px; }
+    .sim-col h3 { font-family: 'Inter', sans-serif; font-size: 13px; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; color: #FAFAF5; margin-bottom: 16px; }
+    .scenario-btn {
+      display: block; width: 100%; text-align: left;
+      font-family: 'Inter', sans-serif; font-size: 13px; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase;
+      padding: 12px 24px; border-radius: 100px; border: 1px solid #D4A017;
+      margin-bottom: 12px; cursor: pointer; transition: all 0.2s;
+    }
+    .scenario-btn.active { background: #D4A017; color: #0A0A0A; }
+    .scenario-btn:not(.active) { background: transparent; color: #D4A017; }
+    .slider-group { margin-bottom: 20px; }
+    .slider-header { display: flex; justify-content: space-between; margin-bottom: 6px; }
+    .slider-header label { font-size: 12px; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; color: #FAFAF5; }
+    .slider-header span { font-size: 14px; color: #D4A017; }
+    input[type="range"] {
+      -webkit-appearance: none; appearance: none; width: 100%; height: 4px;
+      background: #1E3A5F; border-radius: 2px; outline: none;
+    }
+    input[type="range"]::-webkit-slider-thumb {
+      -webkit-appearance: none; width: 20px; height: 20px; border-radius: 50%;
+      background: #D4A017; cursor: pointer; border: 2px solid #FAFAF5;
+    }
+    .results-panel { background: rgba(255,255,255,0.05); border: 1px solid rgba(212,160,23,0.3); border-radius: 12px; padding: 32px; }
+    .results-panel h3 { color: #D4A017; margin-bottom: 24px; }
+    .result-row { margin-bottom: 20px; }
+    .result-label { font-size: 14px; color: #FAFAF5; opacity: 0.7; margin-bottom: 4px; }
+    .result-value { font-family: 'Instrument Serif', Georgia, serif; font-size: 36px; color: #D4A017; }
+    .result-risk { display: flex; align-items: center; gap: 8px; }
+    .risk-dot { width: 12px; height: 12px; border-radius: 50%; }
+    .risk-text { font-size: 18px; font-weight: 500; }
+    .sim-disclaimer { font-size: 11px; color: #FAFAF5; opacity: 0.4; margin-top: 24px; }
+
     /* ===== ANIMATIONS ===== */
     .fade-in { opacity: 0; transform: translateY(40px); transition: opacity 0.8s ease, transform 0.8s ease; }
     .fade-in.visible { opacity: 1; transform: translateY(0); }
@@ -238,6 +274,64 @@
     </div>
   </section>
 
+  <!-- ===== SCENARIOS ===== -->
+  <section id="scenarios" class="scenarios section-padding">
+    <div class="content-max">
+      <span class="label-style" style="color:#D4A017;display:block;margin-bottom:16px">INTERACTIVE SCENARIOS</span>
+      <h2 class="fade-in">Three Futures for Australia</h2>
+      <p class="fade-in">Explore how different AI adoption rates and policy settings could reshape Australia's economic trajectory through 2030. Adjust the sliders below to see how investment, regulation, and workforce development interact to produce different outcomes.</p>
+      <div class="simulator fade-in">
+        <div class="sim-col">
+          <h3>Select Scenario</h3>
+          <button class="scenario-btn active" data-scenario="baseline" onclick="loadScenario('baseline',this)">Baseline</button>
+          <button class="scenario-btn" data-scenario="high" onclick="loadScenario('high',this)">High Growth</button>
+          <button class="scenario-btn" data-scenario="stagnation" onclick="loadScenario('stagnation',this)">Stagnation</button>
+        </div>
+        <div class="sim-col">
+          <h3>Adjust Parameters</h3>
+          <div class="slider-group">
+            <div class="slider-header"><label>Public AI Investment ($B)</label><span id="val-investment">$5B</span></div>
+            <input type="range" id="investment" min="0" max="10" step="0.5" value="5" oninput="updateSim()">
+          </div>
+          <div class="slider-group">
+            <div class="slider-header"><label>Regulatory Stringency</label><span id="val-regulation">50%</span></div>
+            <input type="range" id="regulation" min="0" max="100" step="5" value="50" oninput="updateSim()">
+          </div>
+          <div class="slider-group">
+            <div class="slider-header"><label>Workforce Training Rate</label><span id="val-training">50%</span></div>
+            <input type="range" id="training" min="0" max="100" step="5" value="50" oninput="updateSim()">
+          </div>
+          <div class="slider-group">
+            <div class="slider-header"><label>SME Adoption Support</label><span id="val-sme">50%</span></div>
+            <input type="range" id="smeSupport" min="0" max="100" step="5" value="50" oninput="updateSim()">
+          </div>
+        </div>
+        <div class="sim-col">
+          <div class="results-panel">
+            <h3 class="label-style">Projected Outcomes (2030)</h3>
+            <div class="result-row">
+              <div class="result-label">2030 GDP Impact</div>
+              <div class="result-value" id="res-gdp">A$115B</div>
+            </div>
+            <div class="result-row">
+              <div class="result-label">Jobs Created (000s)</div>
+              <div class="result-value" id="res-jobs">40</div>
+            </div>
+            <div class="result-row">
+              <div class="result-label">Productivity Gain</div>
+              <div class="result-value" id="res-prod">9.2%</div>
+            </div>
+            <div class="result-row">
+              <div class="result-label">Risk Level</div>
+              <div class="result-risk"><span class="risk-dot" id="risk-dot" style="background:#FF9800"></span><span class="risk-text" id="risk-text" style="color:#FF9800">Medium</span></div>
+            </div>
+            <p class="sim-disclaimer">Simplified model for educational purposes. Not a formal econometric forecast.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
 
   <!-- ===== JAVASCRIPT ===== -->
   <script>
@@ -340,6 +434,54 @@
     document.getElementById('jobs-created').style.display = view === 'created' ? 'grid' : 'none';
   }
 
+  // ===== SCENARIO SIMULATOR =====
+  const presets = {
+    baseline: { investment: 5, regulation: 50, training: 50, smeSupport: 50 },
+    high: { investment: 10, regulation: 30, training: 90, smeSupport: 90 },
+    stagnation: { investment: 1, regulation: 80, training: 20, smeSupport: 20 }
+  };
+
+  function loadScenario(key, btn) {
+    const p = presets[key];
+    document.getElementById('investment').value = p.investment;
+    document.getElementById('regulation').value = p.regulation;
+    document.getElementById('training').value = p.training;
+    document.getElementById('smeSupport').value = p.smeSupport;
+    document.querySelectorAll('.scenario-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    updateSim();
+  }
+
+  function updateSim() {
+    const inv = parseFloat(document.getElementById('investment').value);
+    const reg = parseFloat(document.getElementById('regulation').value);
+    const trn = parseFloat(document.getElementById('training').value);
+    const sme = parseFloat(document.getElementById('smeSupport').value);
+
+    document.getElementById('val-investment').textContent = '$' + inv + 'B';
+    document.getElementById('val-regulation').textContent = reg + '%';
+    document.getElementById('val-training').textContent = trn + '%';
+    document.getElementById('val-sme').textContent = sme + '%';
+
+    const gdp = Math.round(inv * 15 + trn * 0.3 + sme * 0.2 - reg * 0.05);
+    const jobs = Math.round(gdp * 0.35);
+    const prod = Math.round((trn * 0.15 + inv * 0.8) * 10) / 10;
+    const riskScore = reg * 0.3 - trn * 0.2 - sme * 0.1;
+    let risk, riskColor;
+    if (riskScore < 5) { risk = 'Low'; riskColor = '#4CAF50'; }
+    else if (riskScore < 15) { risk = 'Medium'; riskColor = '#FF9800'; }
+    else { risk = 'High'; riskColor = '#F44336'; }
+
+    document.getElementById('res-gdp').textContent = 'A$' + gdp + 'B';
+    document.getElementById('res-jobs').textContent = jobs;
+    document.getElementById('res-prod').textContent = prod + '%';
+    document.getElementById('risk-dot').style.background = riskColor;
+    document.getElementById('risk-text').textContent = risk;
+    document.getElementById('risk-text').style.color = riskColor;
+  }
+
+  // Init sim
+  updateSim();
   </script>
 </body>
 </html>
