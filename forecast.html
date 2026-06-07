@@ -66,6 +66,28 @@
     .thesis blockquote { font-family: 'Instrument Serif', Georgia, serif; font-style: italic; font-size: clamp(20px, 2.5vw, 28px); color: #0A0A0A; max-width: 800px; line-height: 1.4; text-align: center; }
     .thesis-p { font-size: 16px; color: #525252; max-width: 640px; text-align: center; margin-top: 32px; line-height: 1.6; }
 
+    /* ===== CHANNELS ===== */
+    .channels { background: #FFFFFF; }
+    .channel-block { margin-bottom: 80px; }
+    .channel-label { color: #D4A017; display: block; margin-bottom: 16px; }
+    .channel-block h2 { font-family: 'Inter', sans-serif; font-size: clamp(28px, 3vw, 42px); font-weight: 500; letter-spacing: -0.01em; line-height: 1.15; color: #0A0A0A; margin-bottom: 24px; }
+    .channel-block > p { font-size: 18px; line-height: 1.6; color: #0A0A0A; max-width: 800px; margin-bottom: 24px; }
+
+    /* Cards */
+    .cards-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; margin-top: 24px; }
+    .card { background: #FFFFFF; border: 1px solid #E5E5E5; border-radius: 12px; padding: 32px; }
+    .card-value { font-family: 'Instrument Serif', Georgia, serif; font-size: 36px; color: #D4A017; line-height: 1; margin-bottom: 8px; }
+    .card-label { font-size: 14px; color: #525252; line-height: 1.5; }
+
+    /* Bar Chart */
+    .bar-chart { margin-top: 32px; }
+    .bar-chart-title { font-size: 13px; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; color: #525252; margin-bottom: 16px; }
+    .bar-row { display: flex; align-items: center; gap: 12px; margin-bottom: 10px; }
+    .bar-label { font-size: 13px; color: #525252; text-align: right; width: 160px; flex-shrink: 0; }
+    .bar-track { flex: 1; height: 32px; background: #F0F0EB; border-radius: 16px; overflow: hidden; }
+    .bar-fill { height: 100%; border-radius: 16px; display: flex; align-items: center; justify-content: flex-end; padding-right: 12px; transition: width 1s ease-out; }
+    .bar-fill span { color: white; font-size: 12px; font-weight: 500; }
+
     /* ===== ANIMATIONS ===== */
     .fade-in { opacity: 0; transform: translateY(40px); transition: opacity 0.8s ease, transform 0.8s ease; }
     .fade-in.visible { opacity: 1; transform: translateY(0); }
@@ -117,6 +139,33 @@
     <div class="content-max">
       <blockquote class="fade-in">"By 2030, AI could contribute A$115 billion annually to Australia's economy &mdash; but realising this potential depends on policy choices we make today. Without decisive action, Australia risks leaving A$150 billion of value unrealised while its global competitors race ahead."</blockquote>
       <p class="thesis-p fade-in">This interactive forecast maps the channels through which AI will reshape Australia's productivity, employment, and industry structure &mdash; and explores the policy pathways that can ensure inclusive, sustainable growth.</p>
+    </div>
+  </section>
+
+  <!-- ===== ECONOMIC CHANNELS ===== -->
+  <section id="channels" class="channels section-padding">
+    <div class="content-max">
+      <!-- Productivity -->
+      <div class="channel-block fade-in">
+        <span class="channel-label label-style">01 &middot; PRODUCTIVITY</span>
+        <h2>The Automation Dividend</h2>
+        <p>Between 25% and 46% of current work activities in Australia could be automated by 2030. AI-driven productivity gains are projected to add A$80 billion annually &mdash; the largest component of the total economic impact. Industries with the greatest opportunity include professional and administrative services (A$27 billion), healthcare and social assistance (A$20 billion), and education and training (A$16 billion).</p>
+        <div class="cards-grid">
+          <div class="card"><div class="card-value">A$80B</div><div class="card-label">annual productivity gains by 2030</div></div>
+          <div class="card"><div class="card-value">44%</div><div class="card-label">of Australian workers' task hours automatable or augmentable</div></div>
+          <div class="card"><div class="card-value">6-8%</div><div class="card-label">potential GDP lift over the next decade</div></div>
+        </div>
+        <div class="bar-chart">
+          <p class="bar-chart-title">Productivity Impact by Industry (A$ Billion, 2030)</p>
+          <div class="bar-row"><span class="bar-label">Professional Services</span><div class="bar-track"><div class="bar-fill" data-width="100" style="background:#D4A017;width:0%"><span>A$27B</span></div></div></div>
+          <div class="bar-row"><span class="bar-label">Healthcare</span><div class="bar-track"><div class="bar-fill" data-width="74" style="background:#1E3A5F;width:0%"><span>A$20B</span></div></div></div>
+          <div class="bar-row"><span class="bar-label">Education</span><div class="bar-track"><div class="bar-fill" data-width="59" style="background:#D4A017;width:0%"><span>A$16B</span></div></div></div>
+          <div class="bar-row"><span class="bar-label">Mining</span><div class="bar-track"><div class="bar-fill" data-width="44" style="background:#1E3A5F;width:0%"><span>A$12B</span></div></div></div>
+          <div class="bar-row"><span class="bar-label">Manufacturing</span><div class="bar-track"><div class="bar-fill" data-width="37" style="background:#D4A017;width:0%"><span>A$10B</span></div></div></div>
+          <div class="bar-row"><span class="bar-label">Retail</span><div class="bar-track"><div class="bar-fill" data-width="30" style="background:#1E3A5F;width:0%"><span>A$8B</span></div></div></div>
+        </div>
+      </div>
+
     </div>
   </section>
 
@@ -200,6 +249,19 @@
     entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('visible'); });
   }, { threshold: 0.15 });
   fadeEls.forEach(el => observer.observe(el));
+
+  // ===== BAR CHART ANIMATION =====
+  const barObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.querySelectorAll('.bar-fill').forEach((bar, i) => {
+          setTimeout(() => { bar.style.width = bar.dataset.width + '%'; }, i * 120);
+        });
+      }
+    });
+  }, { threshold: 0.3 });
+  const barChart = document.querySelector('.bar-chart');
+  if (barChart) barObserver.observe(barChart);
 
   </script>
 </body>
