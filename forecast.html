@@ -46,6 +46,40 @@
     .nav-links a:hover { color: #0A0A0A; }
     .mobile-menu-btn { display: none; flex-direction: column; gap: 5px; cursor: pointer; padding: 8px; background: none; border: none; }
     .mobile-menu-btn span { display: block; width: 20px; height: 2px; background: #0A0A0A; transition: all 0.3s; }
+    /* ===== HERO ===== */
+    .hero { position: relative; width: 100%; height: 100vh; overflow: hidden; }
+    #particle-canvas { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 0; }
+    .hero-content { position: relative; z-index: 1; height: 100%; display: flex; flex-direction: column; justify-content: flex-end; padding: 0 48px 15vh 48px; max-width: 720px; }
+    .hero-label { font-family: 'Inter', sans-serif; font-size: 13px; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; color: #D4A017; margin-bottom: 24px; }
+    .hero h1 { font-family: 'Instrument Serif', Georgia, serif; font-size: clamp(36px, 5vw, 64px); line-height: 1.1; letter-spacing: -0.02em; color: #FAFAF5; }
+    .hero h1 span { display: block; }
+    .hero-sub { font-size: 20px; font-weight: 400; color: #FAFAF5; opacity: 0.85; max-width: 520px; line-height: 1.5; margin-top: 24px; margin-bottom: 32px; }
+    .hero-cta {
+      font-family: 'Inter', sans-serif; font-size: 13px; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase;
+      background: #D4A017; color: #0A0A0A; border-radius: 100px; padding: 14px 32px;
+      width: fit-content; transition: all 0.2s ease; border: none; cursor: pointer;
+    }
+    .hero-cta:hover { background: #E5B128; transform: scale(1.02); }
+
+    /* ===== THESIS ===== */
+    .thesis { min-height: 60vh; display: flex; flex-direction: column; align-items: center; justify-content: center; background: #FAFAF5; }
+    .thesis blockquote { font-family: 'Instrument Serif', Georgia, serif; font-style: italic; font-size: clamp(20px, 2.5vw, 28px); color: #0A0A0A; max-width: 800px; line-height: 1.4; text-align: center; }
+    .thesis-p { font-size: 16px; color: #525252; max-width: 640px; text-align: center; margin-top: 32px; line-height: 1.6; }
+
+    /* ===== ANIMATIONS ===== */
+    .fade-in { opacity: 0; transform: translateY(40px); transition: opacity 0.8s ease, transform 0.8s ease; }
+    .fade-in.visible { opacity: 1; transform: translateY(0); }
+
+    /* ===== RESPONSIVE ===== */
+    @media (max-width: 768px) {
+      .section-padding { padding: 80px 24px; }
+      .hero-content { padding: 0 24px 15vh 24px; }
+      .nav-links { display: none; }
+      .mobile-menu-btn { display: flex; }
+      .cards-grid, .simulator, .methods-grid { grid-template-columns: 1fr; }
+      .pie-wrap { flex-direction: column; align-items: flex-start; }
+      .bar-label { width: 100px; font-size: 11px; }
+    }
   </style>
 </head>
 <body>
@@ -67,9 +101,106 @@
     </div>
   </nav>
 
+  <!-- ===== HERO ===== -->
+  <section class="hero">
+    <canvas id="particle-canvas"></canvas>
+    <div class="hero-content">
+      <span class="hero-label">ECON1626 &middot; INTERACTIVE FORECAST</span>
+      <h1><span>The $115 Billion</span><span>AI Question</span></h1>
+      <p class="hero-sub">How artificial intelligence will reshape Australia's economy by 2030 &mdash; and the choices that will determine who benefits.</p>
+      <button class="hero-cta" onclick="document.getElementById('channels').scrollIntoView({behavior:'smooth'})">Explore the forecast</button>
+    </div>
+  </section>
+
+  <!-- ===== THESIS ===== -->
+  <section id="thesis" class="thesis section-padding">
+    <div class="content-max">
+      <blockquote class="fade-in">"By 2030, AI could contribute A$115 billion annually to Australia's economy &mdash; but realising this potential depends on policy choices we make today. Without decisive action, Australia risks leaving A$150 billion of value unrealised while its global competitors race ahead."</blockquote>
+      <p class="thesis-p fade-in">This interactive forecast maps the channels through which AI will reshape Australia's productivity, employment, and industry structure &mdash; and explores the policy pathways that can ensure inclusive, sustainable growth.</p>
+    </div>
+  </section>
+
 
   <!-- ===== JAVASCRIPT ===== -->
   <script>
+  // ===== PARTICLE SYSTEM =====
+  (function() {
+    const canvas = document.getElementById('particle-canvas');
+    if (!canvas) return;
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (prefersReducedMotion) {
+      canvas.style.background = '#0A1628'; return;
+    }
+    const ctx = canvas.getContext('2d');
+    let W, H, mouseX = 0, mouseY = 0, cameraX = 0, cameraY = 0;
+    const PARTICLE_COUNT = 800;
+    const particles = [];
+    const prefersLowPower = navigator.hardwareConcurrency <= 4;
+    const count = prefersLowPower ? 400 : PARTICLE_COUNT;
+
+    function resize() {
+      W = canvas.width = window.innerWidth;
+      H = canvas.height = window.innerHeight;
+    }
+    resize();
+    window.addEventListener('resize', resize);
+    window.addEventListener('mousemove', e => {
+      mouseX = (e.clientX / W) * 2 - 1;
+      mouseY = -(e.clientY / H) * 2 + 1;
+    }, { passive: true });
+
+    class Particle {
+      constructor() { this.reset(); this.life = Math.random(); }
+      reset() {
+        this.x = -4 + (Math.random() - 0.5) * 3;
+        this.y = -3 + (Math.random() - 0.5) * 3;
+        this.vx = Math.random() * 0.06 - 0.01;
+        this.vy = Math.random() * 0.04 - 0.005;
+        this.life = 1;
+        this.size = 1.5 + Math.random() * 2;
+      }
+      update() {
+        this.life -= 0.002;
+        if (this.life <= 0) { this.reset(); return; }
+        this.vx += 0.0003 + Math.random() * 0.0002;
+        this.vy += 0.00015 + Math.sin(Date.now() * 0.001 + this.x * 100) * 0.00008;
+        this.x += this.vx;
+        this.y += this.vy;
+      }
+      draw() {
+        const sx = (this.x - cameraX) * (W / 14) + W * 0.55;
+        const sy = (this.y - cameraY) * (H / 10) + H * 0.5;
+        if (sx < -20 || sx > W + 20 || sy < -20 || sy > H + 20) return;
+        const alpha = this.life * 0.7;
+        const r = this.size * this.life;
+        const grad = ctx.createRadialGradient(sx, sy, 0, sx, sy, r * 2);
+        grad.addColorStop(0, `rgba(255, 240, 180, ${alpha})`);
+        grad.addColorStop(0.4, `rgba(255, 200, 50, ${alpha * 0.6})`);
+        grad.addColorStop(1, `rgba(212, 160, 23, 0)`);
+        ctx.fillStyle = grad;
+        ctx.fillRect(sx - r * 2, sy - r * 2, r * 4, r * 4);
+      }
+    }
+
+    for (let i = 0; i < count; i++) particles.push(new Particle());
+
+    function animate() {
+      ctx.clearRect(0, 0, W, H);
+      cameraX += (mouseX * 2 - cameraX) * 0.04;
+      cameraY += (mouseY * 1.2 - cameraY) * 0.04;
+      for (const p of particles) { p.update(); p.draw(); }
+      requestAnimationFrame(animate);
+    }
+    animate();
+  })();
+
+  // ===== SCROLL ANIMATIONS =====
+  const fadeEls = document.querySelectorAll('.fade-in');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('visible'); });
+  }, { threshold: 0.15 });
+  fadeEls.forEach(el => observer.observe(el));
+
   </script>
 </body>
 </html>
